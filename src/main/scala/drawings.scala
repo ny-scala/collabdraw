@@ -22,7 +22,6 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
       <html>
         <head>
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.js"></script>
-          <script src="/js/home.js"></script>
         </head>
         <body>
           <div>
@@ -46,6 +45,7 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.js"></script>
           <script src="/js/raphael-min.js"></script>
           <script src="/js/collabdraw.pather.js"></script>
+          <script src="/js/collabdraw.svg.js"></script>
           <script src="/js/collabdraw.channel.js"></script>
           <script>var drawingId = '{d.id}';</script>
           <script><![CDATA[
@@ -62,6 +62,7 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
         </head>
         <body>
           <div class="canvas" id="drawing" data-drawing={d.id}></div>
+          <div id="scratch_pad" style="display:none;"></div>
         </body>
       </html>
     )

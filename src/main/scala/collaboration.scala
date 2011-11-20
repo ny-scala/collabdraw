@@ -17,7 +17,7 @@ class CollaborationPlan(drawings: DrawingStore) extends Plan with CloseOnExcepti
         // TODO push down the current state from this image's actor!
         sockets += id -> (s :: sockets(id))
       case Message(s, Text(msg)) =>
-        // TODO message this image's actor!
+        // TODO message this image's actor w/ new state!
         sockets(id).filterNot(_ == s).foreach(_ send msg)
       case Close(s) =>
         removeSocket(id, s)

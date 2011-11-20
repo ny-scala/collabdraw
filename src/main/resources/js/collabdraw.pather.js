@@ -22,7 +22,7 @@ collabdraw.Pather = function(paper) {
       });
     path[0].setAttribute("id", "path_" + new Date().getTime());
     return path;
-  };
+  }
   
   /** Draw a line segment by augmenting the current path's data string.
    *  http://www.w3.org/TR/SVG/paths.html#PathData
@@ -32,7 +32,7 @@ collabdraw.Pather = function(paper) {
       + "M" + from[0] + "," + from[1]
       + "L" + to[0] + "," + to[1];
     path[0].setAttribute("d", newPath);
-  };
+  }
   
   this.start = function(from) {
     lastPoint = from;

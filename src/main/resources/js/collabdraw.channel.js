@@ -21,36 +21,31 @@ collabdraw.net.Channel = function(options) {
   var pather = new collabdraw.Pather(paper);
   
   socket.onopen = function(e) {
-    console.log("open: " + e);
+    console.log("channel open: " + e);
   };
   
   socket.onerror = function(e) {
-    console.error("error: " + e);
+    console.error("channel error: " + e);
   };
   
   socket.onmessage = function(msg) {
-    console.log(msg.data);
-    // TODO dirty hack! we want to get complete fragments and append
-    var point = eval(msg.data);
-    pather.start(point);
-    pather.onStroke([point[0] + 10, point[1] + 10]);
-    pather.stop();
+    console.log("channel recv");
+    var scratch = document.getElementById("scratch_pad");
+    scratch.innerHTML = msg.data;
+    var svgN = collabdraw.svg.nodeToSVG(scratch.firstChild);
+    var appended = document.getElementById(options.canvas).firstChild.appendChild(svgN);
   };
   
   $("#" + options.canvas).mousedown(function(e) {
     pather.start([e.clientX, e.clientY]);
   })
   .mousemove(function(e) {
-    var move = pather.onStroke([e.clientX, e.clientY]);
-    if(move.length) {
-      var msg = "[" + move[0] + "," + move[1] + "]";
-      console.log("send: " + msg);
-      socket.send(msg);
-    }
+    pather.onStroke([e.clientX, e.clientY]);
   })
   .mouseup(function(e) {
     var path = pather.stop();
-    //console.info(path)
-    //socket.send(path[0]);
+    var pathNode = document.getElementById(path[0].getAttribute("id"));
+    var elementXmlString = collabdraw.svg.nodeToString(pathNode);
+    socket.send(elementXmlString);
   });
 };
