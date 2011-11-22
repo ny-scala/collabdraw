@@ -40,6 +40,7 @@ collabdraw.net.Channel = function(options) {
     pather.start([e.clientX, e.clientY]);
   })
   .mousemove(function(e) {
+    //TODO: account for scroll offset
     pather.onStroke([e.clientX, e.clientY]);
   })
   .mouseup(function(e) {
