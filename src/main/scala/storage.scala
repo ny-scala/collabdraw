@@ -4,16 +4,7 @@ import java.util.UUID.randomUUID
 
 case class User(name: String)
 
-case class Drawing(name: String,
-                    collaborators: List[User] = Nil,
-                    id: String = randomUUID.toString) {
-  
-  def collaborate(user: User) =
-    if(collaborators.contains(user))
-      this
-    else
-      copy(collaborators = user :: collaborators)
-}
+case class Drawing(name: String, id: String = randomUUID.toString)
 
 trait DrawingStore {
   def get(id: String): Option[Drawing]

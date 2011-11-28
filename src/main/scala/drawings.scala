@@ -21,7 +21,7 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
     Html(
       <html>
         <head>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.js"></script>
+          <script src="/js/jquery.js"></script>
         </head>
         <body>
           <div>
@@ -42,7 +42,7 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
     Html(
       <html>
         <head>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.js"></script>
+          <script src="/js/jquery.js"></script>
           <script src="/js/raphael-min.js"></script>
           <script src="/js/collabdraw.pather.js"></script>
           <script src="/js/collabdraw.svg.js"></script>

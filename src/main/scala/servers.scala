@@ -8,7 +8,7 @@ object Servers {
   def main(args: Array[String]) {
     val store = new InMemoryStore
     //TODO test data for now ...
-    store.put(Drawing("test", Nil, "test"))
+    store.put(Drawing("test", "test"))
     val collab = new CollaborationPlan(store)
     val ws = NHttp(5679).plan(collab)
     ws.start()
