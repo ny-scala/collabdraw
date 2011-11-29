@@ -1,6 +1,12 @@
 if(!window.collabdraw) collabdraw = {};
 collabdraw.svg = {};
 
+/** Collapse a node into a string of its attributes and values.
+ *  Given some node:
+ *  <node attr1="foo" attr2="bar"/>
+ *  Produce a string"
+ *  attr1="foo" attr2="bar"
+ */
 collabdraw.svg.collapseAttributes = function(nodeMap) {
   var attrStrings = "";
   if(nodeMap.length)
