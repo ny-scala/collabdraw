@@ -46,7 +46,7 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
           <script src="/js/raphael-min.js"></script>
           <script src="/js/collabdraw.pather.js"></script>
           <script src="/js/collabdraw.svg.js"></script>
-          <script src="/js/collabdraw.channel.js"></script>
+          <script src="/js/collabdraw.net.js"></script>
           <script>var drawingId = '{d.id}';</script>
           <script><![CDATA[
             (function($) {
