@@ -4,10 +4,9 @@ import unfiltered.request._
 import unfiltered.response._
 
 class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
-
   def intent = {
     case GET(Path("/")) =>
-      sys.error("TODO!")
+      viewIndex
 
     case GET(Path(Seg("drawing" :: id :: Nil)) & Params(p)) =>
       drawings.get(id) match {
@@ -19,23 +18,14 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
       sys.error("TODO!")
   }
   
-  def viewIndex(active: Traversable[Drawing]) =
+  def viewIndex =
     Html(
       <html>
         <head>
           <script src="/js/jquery.js"></script>
         </head>
         <body>
-          <div>
-            <form id="create_new" action="/drawing" method="post">
-            <input type="submit" value="Create New Drawing"/>
-            </form>
-          </div>
-          <div id="active_drawings">
-            <ul>
-            {active.map(d => <li><a href={"/drawing/" + d.id}>{d.name}</a></li>)}
-            </ul>
-          </div>
+          Hi there! Check out the <a href="/drawing/test">test drawing</a>
         </body>
       </html>
     )
