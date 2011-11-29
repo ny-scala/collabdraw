@@ -9,3 +9,5 @@ libraryDependencies ++= Seq(
   "net.databinder" %% "unfiltered-jetty" % "0.5.2",
   "net.databinder" %% "unfiltered-netty-websockets" % "0.5.2"
 )
+
+seq(lsSettings :_*)
