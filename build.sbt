@@ -10,4 +10,6 @@ libraryDependencies ++= Seq(
   "net.databinder" %% "unfiltered-netty-websockets" % "0.5.2"
 )
 
+scalacOptions := Seq("-deprecation")
+
 seq(lsSettings :_*)

@@ -7,14 +7,13 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
 
   def intent = {
     case GET(Path("/")) =>
-      viewIndex(drawings.list)
+      sys.error("TODO!")
 
     case GET(Path(Seg("drawing" :: id :: Nil)) & Params(p)) =>
-      drawings.get(id).map(viewDrawing).getOrElse(NotFound)
+      sys.error("TODO!")
     
     case POST(Path("/drawing")) =>
-      val d = drawings.put(Drawing("Untitled"))
-      Redirect("/drawing/" + d.id)
+      sys.error("TODO!")
   }
   
   def viewIndex(active: Traversable[Drawing]) =

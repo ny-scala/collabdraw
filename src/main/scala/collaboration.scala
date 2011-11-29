@@ -2,62 +2,38 @@ package collabdraw
 
 import unfiltered.request._
 import unfiltered.netty.websockets._
-import scala.collection.mutable.HashMap
-import scala.collection.JavaConversions.JConcurrentMapWrapper
-import java.util.concurrent.ConcurrentHashMap
+import scala.collection.immutable.HashMap
+import scala.actors.Actor
 
-class CollaborationPlan(drawings: DrawingStore) extends Plan with CloseOnException {
-  /* Drawing Id => List[WebSocket] */
-  val sockets = new JConcurrentMapWrapper(
-    new ConcurrentHashMap[String, List[WebSocket]]).withDefaultValue(Nil)
-  /* TODO Roll into a single service */
-  val actors = new JConcurrentMapWrapper(
-    new ConcurrentHashMap[String, scala.actors.Actor])
-    
-  def imageActor() =
-    new scala.actors.Actor {
-      private var image = scala.xml.NodeSeq.Empty
-      
-      def act =
-        loop {
-          react {
-            case ('update, path: String) =>
-              image = scala.xml.XML.loadString(path) +: image
-            case 'fetch => reply(image)
-            case 'exit => exit()
-          }
-        }
-      
-      start()
-    }
+/** The main activity hub for drawing. All message routing for coordinating
+ *  draw events passes through here. New users should be given the current
+ *  state of the drawing, incoming messages will represent complete elements
+ *  (for now, lines as path elements).
+ */
+class CollaborationPlan(drawings: DrawingStore, drawingActor: Actor)
+  extends Plan
+  with CloseOnException {
+  
+  @volatile
+  var sockets =
+    HashMap.empty[String, Set[WebSocket]].withDefaultValue(Set.empty[WebSocket])
   
   def intent = {
     case GET(Path(Seg("drawing" :: id :: Nil))) => {
       case Open(s) =>
-        sockets += id -> (s :: sockets(id))
-        actors.get(id) match {
-          case Some(a) =>
-            (a !! 'fetch)() match {
-              case svg: scala.xml.NodeSeq =>
-                sockets(id).filterNot(_ == s).foreach { s =>
-                  s.send(svg.toString)
-                }
-            }
-          case None => actors(id) = imageActor()
+        sockets += id -> (sockets(id) + s)
+        (drawingActor !! FetchDrawing(id))() match {
+          case rawSvg: String => s.send(rawSvg)
         }
       case Message(s, Text(msg)) =>
-        sockets(id).filterNot(_ == s).foreach(_ send msg)
-        actors(id) ! ('update -> msg)
+        /* Message downstream clients with the new stroke and update
+          the shared drawing. */
       case Close(s) =>
-        removeSocket(id, s)
+        /* Remove the associated socket. */
       case Error(s, e) =>
-        removeSocket(id, s)
+        /* Remove the associated socket. */
         e.printStackTrace
     }
-  }
-  
-  def removeSocket(id: String, ws: WebSocket) {
-    sockets(id) = sockets(id).filterNot(_ == ws)
   }
   
   def pass = Plan.DefaultPassHandler
