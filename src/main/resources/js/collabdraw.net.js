@@ -17,7 +17,7 @@ collabdraw.net = {
 
 collabdraw.net.Channel = function(options) {
   var socket = new collabdraw.net.newWebSocket(options.url);
-  var paper = Raphael(options.canvas, 700, 700);
+  var paper = Raphael(options.canvas, 1500, 1500);
   var pather = new collabdraw.Pather(paper);
   
   socket.onopen = function(e) {

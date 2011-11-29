@@ -11,6 +11,9 @@ object Servers {
     val store = new InMemoryStore
     val collab = new CollaborationPlan(store, drawingActor)
     
+    /* Always provide a blank test drawing. */
+    store.put(new Drawing("Test", "test"))
+    
     val ws = NHttp(5679).plan(collab)
     ws.start()
     

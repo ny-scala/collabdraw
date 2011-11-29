@@ -10,7 +10,10 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
       sys.error("TODO!")
 
     case GET(Path(Seg("drawing" :: id :: Nil)) & Params(p)) =>
-      sys.error("TODO!")
+      drawings.get(id) match {
+        case Some(d) => viewDrawing(d)
+        case None => NotFound
+      }
     
     case POST(Path("/drawing")) =>
       sys.error("TODO!")
