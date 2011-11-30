@@ -34,15 +34,15 @@ class CollaborationPlan(drawingActor: Actor)
              fullSvg.foreach(s.send)
          }
 
-      case Message(s, Text(svg)) =>
+      case Message(s, Text(txt)) =>
+        println("rec message %s from %s" format (txt, s))
+        scala.xml.XML.loadString(txt) match {
+          case svg =>
+           drawingActor ! PutDrawing(id, svg)
+        }
 
-        /* Message downstream clients with the new stroke and update
-          the shared drawing. */
-        println("rec message %s from %s" format (svg, s))
-
-        drawingActor ! PutDrawing(id, svg)
-
-        sockets(id).filterNot(_ == s).foreach(_.send(svg))
+        // update other clients
+        sockets(id).filterNot(_ == s).foreach(_.send(txt))
         
       case Close(s) =>
         /* Remove the associated socket. */
