@@ -29,9 +29,14 @@ class CollaborationPlan(drawingActor: Actor)
         // get the current state
          val future = drawingActor !! FetchDrawing(id)
          future() match {
-           case fullSvg: Seq[String] =>
-             println("pulled svg info %s" format fullSvg)
-             fullSvg.foreach(s.send)
+           case xmlSvg: scala.xml.NodeSeq =>
+             println("pulled svg info %s" format xmlSvg)
+             xmlSvg.foreach(svg => s.send(svg.toString))
+           case strs: Seq[_] =>
+             println("actor responded with %s" format strs)
+             strs.foreach(str => s.send(str.toString))
+           case other =>
+             println("actor responded with unhandled msg %s" format other)
          }
 
       case Message(s, Text(txt)) =>
