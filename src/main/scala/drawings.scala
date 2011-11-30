@@ -14,8 +14,14 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
         case None => NotFound
       }
     
-    case POST(Path("/drawing")) =>
-      sys.error("TODO!")
+    case POST(Path("/drawing") & Params(p)) => 
+      p.get("name") match {
+        case Some(Seq(name)) => 
+	  val drawing = drawings.put(Drawing(name))
+          Redirect("/drawing/" + drawing.id)
+	case _  => 
+	  BadRequest
+      }
   }
   
   def viewIndex =
@@ -26,6 +32,10 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
         </head>
         <body>
           Hi there! Check out the <a href="/drawing/test">test drawing</a>
+          <form method="post" action="/drawing">
+	   <label for="name">Name:</label>: <input name="name"></input>
+           <input type="submit"></input>
+	  </form>
         </body>
       </html>
     )

@@ -7,9 +7,9 @@ object Servers {
   
   def main(args: Array[String]) {
     
-    val drawingActor = new DrawingActor
     val store = new InMemoryStore
-    val collab = new CollaborationPlan(store, drawingActor)
+    val drawingActor = new DrawingActor(store)
+    val collab = new CollaborationPlan(drawingActor)
     
     /* Always provide a blank test drawing. */
     store.put(new Drawing("Test", "test"))
@@ -20,7 +20,7 @@ object Servers {
     Http(8080)
       .plan(new DrawingPlan(store))
       .resources(getClass.getResource("/"))
-      .run()
+      .run
     
     ws.stop()
   }
