@@ -24,6 +24,9 @@ class DrawingActor(store: DrawingStore) extends Actor {
 
         case ActiveDrawings =>
           reply(data.keys.toList)
+
+        case Stop =>
+          exit()
       }
     }
   }
@@ -35,3 +38,4 @@ sealed trait DrawingMessage
 case class FetchDrawing(id: String) extends DrawingMessage // reply with
 case class PutDrawing(id: String, svg: NodeSeq) extends DrawingMessage
 case object ActiveDrawings extends DrawingMessage
+case object Stop
