@@ -24,6 +24,10 @@ object Servers {
       .resources(getClass.getResource("/"))
       .run({ s =>
         drawingActor.start
+      }, {
+        s =>
+          drawingActor ! Stop
+          println("stopping")
       })
   }
   
