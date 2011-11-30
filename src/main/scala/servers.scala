@@ -8,9 +8,7 @@ object Servers {
   def main(args: Array[String]) {
     
     val store = new InMemoryStore
-
     val drawingActor = new DrawingActor(store)
-
     val collab = new CollaborationPlan(drawingActor)
     
     /* Always provide a blank test drawing. */
@@ -26,6 +24,7 @@ object Servers {
         drawingActor.start
       }, {
         s =>
+          ws.stop()
           drawingActor ! Stop
           println("stopping")
       })
