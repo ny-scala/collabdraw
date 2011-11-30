@@ -42,10 +42,10 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
 	      }
 	    }
 	  </ul>
-          <form method="post" action="/drawing">
-	   <label for="name">Name:</label>: <input name="name"></input>
-           <input type="submit"></input>
-	  </form>
+      <form method="post" action="/drawing">
+	      <label for="name">Name:</label>: <input name="name"></input>
+        <input type="submit"></input>
+	    </form>
         </body>
       </html>
     )
@@ -64,7 +64,7 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
             (function($) {
               $(document).ready(function() {
                 collabdraw.net.Channel({
-                  url:    'ws://10.10.1.214:5679/drawing/' + drawingId,
+                  url:    'ws://'+window.location.hostname+':5679/drawing/' + drawingId,
                   canvas: 'drawing'
                 });
               });
