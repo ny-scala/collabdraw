@@ -1,6 +1,10 @@
+body {
+  margin:0;
+  padding:0;
+}
 .canvas {
   width: 100%;
-  border: 1px solid;
+  border: 0;
   height: 100%;
   overflow: hidden;
 }
