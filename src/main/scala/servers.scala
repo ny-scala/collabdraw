@@ -20,7 +20,7 @@ object Servers {
     ws.start()
     
     Http(8080)
-      .plan(new DrawingPlan(store))
+      .plan(new DrawingPlan(store, drawingActor))
       .resources(getClass.getResource("/"))
       .run({ s =>
         drawingActor.start
