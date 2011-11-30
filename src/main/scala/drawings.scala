@@ -18,34 +18,41 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
     case POST(Path("/drawing") & Params(p)) => 
       p.get("name") match {
         case Some(Seq(name)) => 
-	  val drawing = drawings.put(Drawing(name))
+	        val drawing = drawings.put(Drawing(name))
           Redirect("/drawing/" + drawing.id)
-	case _  => 
-	  BadRequest
-      }
+       case _ => Redirect("/")
+     }
   }
   
   def viewIndex =
     Html(
       <html>
         <head>
-          <script src="/js/jquery.js"></script>
+          <link href="http://fonts.googleapis.com/css?family=Delius" rel="stylesheet" type="text/css"/>
+          <link href="/css/index.css" rel="stylesheet" type="text/css"/>
+          <script src="/js/jquery.js" type="text/javascript"></script>
+          <script src="/js/index.js" type="text/javascript"></script>
         </head>
         <body>
-          Hi there! Check out the <a href="/drawing/test">test drawing</a>
-	  <ul>
-	    {
-	      val drawing_ids = (drawing_actor !! ActiveDrawings)().asInstanceOf[Seq[String]]
-	      for ( drawing_id <- drawing_ids) yield {
-	        val drawing = drawings.get(drawing_id).getOrElse { sys.error("Couldn't find Drawing") }
-	        <li><a href={"/drawing/"+drawing.id}>{drawing.name}</a></li>
-	      }
-	    }
-	  </ul>
-      <form method="post" action="/drawing">
-	      <label for="name">Name:</label>: <input name="name"></input>
-        <input type="submit"></input>
-	    </form>
+         <div id="container">
+          <h1>collabdraw</h1>
+          <p>
+            Hi there! Check out the <a href="/drawing/test">test drawing</a>
+          </p>
+          <form method="post" action="/drawing">
+	          <input name="name" type="text" id="name" placeholder="What do you want to draw?"></input>
+            <input type="submit" id="submit-drawing" class="btn" value="Start drawing"></input>
+	        </form>
+          <ul>
+	        {
+	          val drawing_ids = (drawing_actor !! ActiveDrawings)().asInstanceOf[Seq[String]]
+	          for ( drawing_id <- drawing_ids) yield {
+	            val drawing = drawings.get(drawing_id).getOrElse { sys.error("Couldn't find Drawing") }
+	            <li><a href={"/drawing/"+drawing.id}>{drawing.name}</a></li>
+	          }
+	        }
+	        </ul>
+         </div>
         </body>
       </html>
     )
@@ -55,13 +62,13 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
       <html>
         <head>
           <title>collabdraw { d.name }</title>
-          <script src="/js/jquery.js"></script>
-          <script src="/js/raphael-min.js"></script>
-          <script src="/js/collabdraw.pather.js"></script>
-          <script src="/js/collabdraw.svg.js"></script>
-          <script src="/js/collabdraw.net.js"></script>
-          <script>var drawingId = '{d.id}';</script>
-          <script><![CDATA[
+          <script src="/js/jquery.js" type="text/javascript"></script>
+          <script src="/js/raphael-min.js" type="text/javascript"></script>
+          <script src="/js/collabdraw.pather.js" type="text/javascript"></script>
+          <script src="/js/collabdraw.svg.js" type="text/javascript"></script>
+          <script src="/js/collabdraw.net.js" type="text/javascript"></script>
+          <script type="text/javascript">var drawingId = '{d.id}';</script>
+          <script type="text/javascript"><![CDATA[
             (function($) {
               $(document).ready(function() {
                 collabdraw.net.Channel({
