@@ -2,8 +2,9 @@ package collabdraw
 
 import unfiltered.request._
 import unfiltered.response._
+import scala.actors.Actor
 
-class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
+class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfiltered.filter.Plan {
   def intent = {
     case GET(Path("/")) =>
       viewIndex
@@ -32,6 +33,15 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
         </head>
         <body>
           Hi there! Check out the <a href="/drawing/test">test drawing</a>
+	  <ul>
+	    {
+	      val drawing_ids = (drawing_actor !! ActiveDrawings)().asInstanceOf[Seq[String]]
+	      for ( drawing_id <- drawing_ids) yield {
+	        val drawing = drawings.get(drawing_id).getOrElse { sys.error("Couldn't find Drawing") }
+	        <li><a href={"/drawing/"+drawing.id}>{drawing.name}</a></li>
+	      }
+	    }
+	  </ul>
           <form method="post" action="/drawing">
 	   <label for="name">Name:</label>: <input name="name"></input>
            <input type="submit"></input>
