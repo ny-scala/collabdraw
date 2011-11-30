@@ -54,7 +54,7 @@ class DrawingPlan(drawings: DrawingStore) extends unfiltered.filter.Plan {
             (function($) {
               $(document).ready(function() {
                 collabdraw.net.Channel({
-                  url:    'ws://localhost:5679/drawing/' + drawingId,
+                  url:    'ws://10.10.1.214:5679/drawing/' + drawingId,
                   canvas: 'drawing'
                 });
               });
