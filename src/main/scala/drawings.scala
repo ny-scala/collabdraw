@@ -41,7 +41,7 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
             Hi there! Check out the <a href="/drawing/test">test drawing</a>
           </p>
           <form method="post" action="/drawing">
-	          <input name="name" type="text" id="name" placeholder="What do you want to draw?"></input>
+	          <input name="name" autocomplete="off" type="text" id="name" placeholder="What do you want to draw?"></input>
             <input type="submit" id="submit-drawing" class="btn" value="Start drawing"></input>
 	        </form>
           <ul>
