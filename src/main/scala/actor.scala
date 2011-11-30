@@ -15,4 +15,4 @@ class DrawingActor(store: DrawingStore) extends Actor {
 /* Messages to handle; we'll need more.. */
 sealed trait DrawingMessage
 case class FetchDrawing(id: String) extends DrawingMessage
-case class PutDrawing(id: String, svg: String) extends DrawingMessage
+case class PutDrawing(id: String, svg: scala.xml.NodeSeq) extends DrawingMessage
