@@ -21,43 +21,29 @@ class CollaborationPlan(drawingActor: Actor)
   def intent = {
     case GET(Path(Seg("drawing" :: id :: Nil))) => {
       case Open(s) =>
-        println("connection to %s opened" format s)
-
         // update list of websockets for drawing `id`
         sockets += id -> (sockets(id) + s)
-
         // get the current state
          val future = drawingActor !! FetchDrawing(id)
          future() match {
-           case xmlSvg: scala.xml.NodeSeq =>
-             println("pulled svg info %s" format xmlSvg)
-             xmlSvg.foreach(svg => s.send(svg.toString))
-           case strs: Seq[_] =>
-             println("actor responded with %s" format strs)
-             strs.foreach(str => s.send(str.toString))
+           case currentSvg: String if(!currentSvg.isEmpty) =>
+             sockets(id).foreach(_.send(currentSvg))
            case other =>
-             println("actor responded with unhandled msg %s" format other)
+             println("discarding response from actor '%s'" format other)
          }
 
       case Message(s, Text(txt)) =>
-        println("rec message %s from %s" format (txt, s))
-        scala.xml.XML.loadString(txt) match {
-          case svg =>
-           drawingActor ! PutDrawing(id, svg)
-        }
-
-        // update other clients
-        sockets(id).filterNot(_ == s).foreach(_.send(txt))
+        scala.util.control.Exception.allCatch(
+          scala.xml.XML.loadString(txt) match {
+            case svg =>
+              drawingActor ! PutDrawing(id, svg)
+              sockets(id).filterNot(_ == s).foreach(_.send(txt))
+        })
         
       case Close(s) =>
-        /* Remove the associated socket. */
-        println("%s connection closed" format (s))
-        println("before %s" format sockets)
         sockets += (id -> sockets(id).filterNot(_ == s))
-        println("after %s" format sockets)
 
       case Error(s, e) =>
-        /* Remove the associated socket. */
         e.printStackTrace
     }
   }
