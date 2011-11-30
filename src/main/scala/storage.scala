@@ -70,7 +70,7 @@ object MongoStore extends DrawingStore {
 
   def put(drawing: Drawing) = {
     val writeConcern = collection.writeConcern
-    val writeResult = collection.insert(toDBObject(drawing), writeConcern)
+    val writeResult = collection.save(toDBObject(drawing), writeConcern)
     val commandResult = writeResult.getLastError(writeConcern)
     if (!commandResult.ok()) {
       sys.error("put: failed for drawing.id=%s because\n%s".format(drawing.id, commandResult.getErrorMessage))
