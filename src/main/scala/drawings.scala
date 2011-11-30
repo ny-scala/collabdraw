@@ -54,6 +54,7 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
     Html(
       <html>
         <head>
+          <title>collabdraw { d.name }</title>
           <script src="/js/jquery.js"></script>
           <script src="/js/raphael-min.js"></script>
           <script src="/js/collabdraw.pather.js"></script>
