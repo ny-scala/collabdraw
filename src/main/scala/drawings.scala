@@ -28,6 +28,7 @@ class DrawingPlan(drawings: DrawingStore, drawing_actor: Actor) extends unfilter
     Html(
       <html>
         <head>
+          <title>collabdraw</title>
           <link href="http://fonts.googleapis.com/css?family=Delius" rel="stylesheet" type="text/css"/>
           <link href="/css/index.css" rel="stylesheet" type="text/css"/>
           <script src="/js/jquery.js" type="text/javascript"></script>
