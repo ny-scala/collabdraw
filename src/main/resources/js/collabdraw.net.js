@@ -30,9 +30,7 @@ collabdraw.net.Channel = function(options) {
   
   socket.onmessage = function(msg) {
     console.log("channel recv");
-    var scratch = document.getElementById("scratch_pad");
-    scratch.innerHTML = msg.data;
-    var svgN = collabdraw.svg.nodeToSVG(scratch.firstChild);
+    var svgN = collabdraw.svg.serializer.toXml( msg.data );
     var appended = document.getElementById(options.canvas).firstChild.appendChild(svgN);
   };
   
@@ -46,7 +44,7 @@ collabdraw.net.Channel = function(options) {
   .mouseup(function(e) {
     var path = pather.stop();
     var pathNode = document.getElementById(path[0].getAttribute("id"));
-    var elementXmlString = collabdraw.svg.nodeToString(pathNode);
+    var elementXmlString = collabdraw.svg.serializer.toString( pathNode );
     socket.send(elementXmlString);
   });
 };
