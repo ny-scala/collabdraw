@@ -1,48 +1,22 @@
 if(!window.collabdraw) collabdraw = {};
 collabdraw.svg = {};
+collabdraw.svg.ns = "http://www.w3.org/2000/svg";
 
-/** Collapse a node into a string of its attributes and values.
- *  Given some node:
- *  <node attr1="foo" attr2="bar"/>
- *  Produce a string"
- *  attr1="foo" attr2="bar"
- */
-collabdraw.svg.collapseAttributes = function(nodeMap) {
-  var attrStrings = "";
-  if(nodeMap.length)
-    for(var i = 0; i < nodeMap.length; i++) {
-      var attr = nodeMap.item(i);
-      attrStrings += " " + attr.nodeName + "=\"" + attr.nodeValue + "\"";
-    }
-  return attrStrings;
-};
+collabdraw.svg.serializer = {
 
-/** Recursively serialize a DOM Node into an XML string. This is totally ad-hoc;
- *  surely a better method is availble internally...
- */
-collabdraw.svg.nodeToString = function(node) {
-  if(node.nodeType == 1) {
-    var attrs = collabdraw.svg.collapseAttributes(node.attributes);
-    var open = "<" + node.nodeName + attrs + ">";
-    var close = "</" + node.nodeName + ">";
-    var children = "";
-    for(var i = 0; i < node.childNodes.length; i++)
-      children += collabdraw.svg.nodeToString(node.childNodes.item(i));
-    
-    return open + children + close;
-  } else {
-    console.warn("Ignoring non-element node: " + node + "; " + node.nodeValue);
-    return "";
-  }
-};
+	toXml : ( function( ) {
+		var _parser = ( window.DOMParser ) ? new DOMParser( ) : new ActiveXObject( "Microsoft.XMLDOM" );
+		return function( str ) {
+			return window.DOMParser ? 
+				_parser.parseFromString( '<svg xmlns="' + collabdraw.svg.ns + '">' + str + '</svg>', "text/xml" ).firstChild : 
+				_parser.loadXML( str );
+		};
+	})( ),
 
-/** Recreate a DOM Node as an SVG node. Note: not yet recursive! */
-collabdraw.svg.nodeToSVG = function(node) {
-  var svgN = document.createElementNS("http://www.w3.org/2000/svg", node.nodeName.toLowerCase());
-  for(var i = 0; i < node.attributes.length; i++) {
-    var attr = node.attributes.item(i);
-    console.log("svgN.setAttribute(\""+attr.nodeName+"\", \""+attr.nodeValue+"\");");
-    svgN.setAttribute(attr.nodeName, attr.nodeValue);
-  }
-  return svgN;
+	toString : ( function( ) {
+		var _serializer = new XMLSerializer( );
+		return function( xml ) {
+        	return _serializer.serializeToString( xml );
+		};
+	})( )
 };
